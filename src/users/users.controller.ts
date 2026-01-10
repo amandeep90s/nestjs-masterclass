@@ -3,13 +3,10 @@ import {
   Controller,
   Delete,
   Get,
-  Headers,
-  Ip,
   Param,
   ParseIntPipe,
   Post,
   Put,
-  Query,
 } from '@nestjs/common';
 
 @Controller('users')
@@ -20,17 +17,15 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne() {
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    console.log(typeof id);
+
     return 'This action returns a user by id';
   }
 
   @Post()
-  create(
-    @Body() body: { firstName: string; lastName: string },
-    @Headers() headers: any,
-    @Ip() ip: any,
-  ) {
-    console.log({ body, headers, ip });
+  create(@Body() body: { firstName: string; lastName: string }) {
+    console.log({ body });
     return 'This action creates a new user';
   }
 
@@ -39,13 +34,10 @@ export class UsersController {
     return 'This action updates a user';
   }
 
-  @Delete(':id{/:optional}') // Add forward slash with curly braces if params is used as optional {/:id}
-  remove(
-    @Param('id', ParseIntPipe) id: number | undefined,
-    @Param('optional') optional?: number,
-    @Query('limit', ParseIntPipe) limit?: number,
-  ) {
-    console.log({ id, optional, limit });
+  @Delete(':id') // Add forward slash with curly braces if params is used as optional {/:id}
+  remove(@Param('id', ParseIntPipe) id: number) {
+    console.log({ id });
+
     return 'This action removes a user';
   }
 }
