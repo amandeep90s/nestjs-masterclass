@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
+  Ip,
   Param,
   ParseIntPipe,
   Post,
@@ -23,8 +25,12 @@ export class UsersController {
   }
 
   @Post()
-  create(@Body() body: { firstName: string; lastName: string }) {
-    console.log({ body });
+  create(
+    @Body() body: { firstName: string; lastName: string },
+    @Headers() headers: any,
+    @Ip() ip: any,
+  ) {
+    console.log({ body, headers, ip });
     return 'This action creates a new user';
   }
 
