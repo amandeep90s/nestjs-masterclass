@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -34,10 +35,11 @@ export class UsersController {
 
   @Delete(':id{/:optional}') // Add forward slash with curly braces if params is used as optional {/:id}
   remove(
-    @Param() params: { id: string; optional?: string },
-    @Query() query: { test: string },
+    @Param('id', ParseIntPipe) id: number | undefined,
+    @Param('optional') optional?: number,
+    @Query('limit', ParseIntPipe) limit?: number,
   ) {
-    console.log({ params, query });
+    console.log({ id, optional, limit });
     return 'This action removes a user';
   }
 }
