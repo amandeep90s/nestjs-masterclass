@@ -1,4 +1,13 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 
 @Controller('users')
 export class UsersController {
@@ -13,7 +22,8 @@ export class UsersController {
   }
 
   @Post()
-  create() {
+  create(@Body() body: { firstName: string; lastName: string }) {
+    console.log({ body });
     return 'This action creates a new user';
   }
 
@@ -22,8 +32,12 @@ export class UsersController {
     return 'This action updates a user';
   }
 
-  @Delete(':id')
-  remove() {
+  @Delete(':id{/:optional}') // Add forward slash with curly braces if params is used as optional {/:id}
+  remove(
+    @Param() params: { id: string; optional?: string },
+    @Query() query: { test: string },
+  ) {
+    console.log({ params, query });
     return 'This action removes a user';
   }
 }
