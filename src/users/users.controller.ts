@@ -24,8 +24,7 @@ export class UsersController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
   ) {
-    console.log({ page, limit });
-    return 'This action returns all users';
+    return this.usersService.findAll(page, limit);
   }
 
   @Get(':id')
