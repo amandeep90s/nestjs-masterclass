@@ -10,7 +10,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { CreateUserDto } from './dtos';
+import { CreateUserDto, GetUserParamDto } from './dtos';
 
 @Controller('users')
 export class UsersController {
@@ -24,8 +24,8 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    console.log(typeof id);
+  findOne(@Param() getUserParamDto: GetUserParamDto) {
+    console.log(typeof getUserParamDto.id);
 
     return 'This action returns a user by id';
   }
