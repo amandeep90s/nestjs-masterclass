@@ -10,11 +10,13 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto, GetUserParamDto } from './dtos';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './providers/users.service';
 
 @Controller('users')
+@ApiTags('Users')
 export class UsersController {
   // Dependency Injection - Injecting Users Service
   constructor(private readonly usersService: UsersService) {}
