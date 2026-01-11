@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { GetUserParamDto } from '../dtos';
 
 @Injectable()
 export class UsersService {
@@ -32,10 +31,9 @@ export class UsersService {
    * @param getUserParamDto
    * @returns
    */
-  public findById(getUserParamDto: GetUserParamDto) {
-    console.log({ getUserParamDto });
+  public findById(id: number) {
     return {
-      id: getUserParamDto.id,
+      id,
       firstName: 'John',
       email: 'john@example.com',
     };

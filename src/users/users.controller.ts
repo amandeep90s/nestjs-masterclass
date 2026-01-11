@@ -29,7 +29,7 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param() getUserParamDto: GetUserParamDto) {
-    return this.usersService.findById(getUserParamDto);
+    return this.usersService.findById(getUserParamDto.id);
   }
 
   @Post()
