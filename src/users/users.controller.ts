@@ -11,6 +11,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { CreateUserDto, GetUserParamDto } from './dtos';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -37,7 +38,8 @@ export class UsersController {
   }
 
   @Put(':id')
-  update() {
+  update(@Body() updateUserDto: UpdateUserDto) {
+    console.log({ updateUserDto });
     return 'This action updates a user';
   }
 
