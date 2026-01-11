@@ -29,9 +29,7 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param() getUserParamDto: GetUserParamDto) {
-    console.log(typeof getUserParamDto.id);
-
-    return 'This action returns a user by id';
+    return this.usersService.findById(getUserParamDto);
   }
 
   @Post()
