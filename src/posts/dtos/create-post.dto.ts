@@ -1,0 +1,124 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsEnum,
+  IsISO8601,
+  IsJSON,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUrl,
+  Matches,
+  MinLength,
+  ValidateNested,
+} from 'class-validator';
+import { EPostStatus, EPostType } from '../enums';
+import { CreatePostMetaOptionsDto } from './create-post-meta-options.dto';
+
+export class CreatePostDto {
+  @ApiProperty({ description: 'Title of the post', example: 'My First Post' })
+  @IsString()
+  @MinLength(4, { message: 'Title must be at least 4 characters long' })
+  @IsNotEmpty({ message: 'Title is required' })
+  title: string;
+
+  @ApiProperty({ description: 'Slug for the post', example: 'my-first-post' })
+  @IsString()
+  @IsNotEmpty({ message: 'Slug is required' })
+  @Matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
+    message: 'A slug should be all small letters and hyphens only',
+  })
+  slug: string;
+
+  @ApiProperty({
+    description: 'Possible types of the post: post, page, story, series',
+    enum: EPostType,
+    example: EPostType.POST,
+  })
+  @IsEnum(EPostType, { message: 'Invalid post type' })
+  @IsNotEmpty({ message: 'Post type is required' })
+  postType: EPostType;
+
+  @ApiPropertyOptional({
+    description: 'Content of the post',
+    example: 'This is the content of my first post',
+  })
+  @IsString()
+  @IsOptional()
+  content?: string;
+
+  @ApiProperty({
+    description:
+      'Possible statuses of the post: draft, published, review, scheduled',
+    enum: EPostStatus,
+    example: EPostStatus.DRAFT,
+  })
+  @IsEnum(EPostStatus, { message: 'Invalid post status' })
+  @IsNotEmpty({ message: 'Post status is required' })
+  status: EPostStatus;
+
+  @ApiPropertyOptional({
+    description:
+      'Serialize your JSON object else a validation error will be thrown',
+    example:
+      '{"@context":"https://schema.org","@type":"BlogPosting","headline":"My First Post"}',
+  })
+  @IsOptional()
+  @IsJSON()
+  schema?: string;
+
+  @ApiPropertyOptional({
+    description: 'Featured image URL',
+    example: 'https://example.com/image.jpg',
+  })
+  @IsOptional()
+  @IsUrl()
+  featuredImageUrl?: string;
+
+  @ApiPropertyOptional({
+    description: 'Publication date of the post',
+    example: '2025-05-05T07:45:32+0000',
+  })
+  @IsISO8601()
+  @IsOptional()
+  publishedOn?: Date;
+
+  @ApiPropertyOptional({
+    description: 'Array of tags associated with the post passed as strings',
+    example: ['nestjs', 'typescript'],
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true, message: 'Each tag must be a string' })
+  @MinLength(3, {
+    each: true,
+    message: 'Each tag must be at least 3 characters long',
+  })
+  tags?: string[];
+
+  @ApiPropertyOptional({
+    type: 'array',
+    required: false,
+    description: 'Meta options for the post',
+    items: {
+      type: 'object',
+      properties: {
+        key: {
+          type: 'string',
+          description: 'Key for the meta option',
+          example: 'meta_key',
+        },
+        value: {
+          description: 'Value for the meta option',
+          example: 'meta_value',
+        },
+      },
+    },
+  })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreatePostMetaOptionsDto)
+  metaOptions?: CreatePostMetaOptionsDto[];
+}
