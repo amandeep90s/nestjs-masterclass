@@ -12,17 +12,18 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(3, { message: 'First name must be at least 3 characters long' })
-  @MaxLength(50, { message: 'First name must be at most 50 characters long' })
+  @MaxLength(100, { message: 'First name must be at most 100 characters long' })
   firstName: string;
 
   @IsString()
   @IsOptional()
   @MinLength(3, { message: 'Last name must be at least 3 characters long' })
-  @MaxLength(50, { message: 'Last name must be at most 50 characters long' })
+  @MaxLength(100, { message: 'Last name must be at most 100 characters long' })
   lastName?: string;
 
   @IsEmail()
   @IsNotEmpty()
+  @MaxLength(100, { message: 'Email must be at most 100 characters long' })
   email: string;
 
   @IsString()
