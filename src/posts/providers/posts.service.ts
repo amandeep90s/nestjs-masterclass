@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/providers/users.service';
-import { CreatePostDto } from '../dtos';
+import { CreatePostDto, UpdatePostDto } from '../dtos';
 
 @Injectable()
 export class PostsService {
@@ -21,5 +21,12 @@ export class PostsService {
 
     // Logic to create a post would go here
     return { message: 'Post created successfully' };
+  }
+
+  public update(updatePostDto: UpdatePostDto) {
+    console.log({ updatePostDto });
+
+    // Logic to create a post would go here
+    return { message: 'Post updated successfully' };
   }
 }
