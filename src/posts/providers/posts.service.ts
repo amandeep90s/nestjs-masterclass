@@ -26,7 +26,7 @@ export class PostsService {
   public update(id: number, updatePostDto: UpdatePostDto) {
     console.log({ id, updatePostDto });
 
-    // Logic to create a post would go here
+    // Logic to update a post would go here
     return { message: 'Post updated successfully' };
   }
 }
