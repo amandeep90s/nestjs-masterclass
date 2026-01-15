@@ -60,8 +60,7 @@ export class UsersController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    console.log({ createUserDto });
-    return 'This action creates a new user';
+    return this.usersService.create(createUserDto);
   }
 
   @Put(':id')
