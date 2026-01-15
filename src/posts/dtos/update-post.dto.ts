@@ -1,13 +1,4 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty } from 'class-validator';
+import { PartialType } from '@nestjs/swagger';
 import { CreatePostDto } from './create-post.dto';
 
-export class UpdatePostDto extends PartialType(CreatePostDto) {
-  @ApiProperty({
-    description: 'The id of the post to be updated',
-    example: 1,
-  })
-  @IsInt()
-  @IsNotEmpty()
-  id: number;
-}
+export class UpdatePostDto extends PartialType(CreatePostDto) {}

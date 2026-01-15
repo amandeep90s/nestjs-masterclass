@@ -1,5 +1,13 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDto, UpdatePostDto } from './dtos';
 import { PostsService } from './providers/posts.service';
 
@@ -30,8 +38,17 @@ export class PostsController {
     description:
       'You will get a 200 response if your post is updated successfully',
   })
-  @Put()
-  update(@Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(updatePostDto);
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'The ID of the post to update',
+    example: 1,
+  })
+  @Put('/:id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePostDto: UpdatePostDto,
+  ) {
+    return this.postsService.update(id, updatePostDto);
   }
 }

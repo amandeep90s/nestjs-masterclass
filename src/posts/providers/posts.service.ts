@@ -23,8 +23,8 @@ export class PostsService {
     return { message: 'Post created successfully' };
   }
 
-  public update(updatePostDto: UpdatePostDto) {
-    console.log({ updatePostDto });
+  public update(id: number, updatePostDto: UpdatePostDto) {
+    console.log({ id, updatePostDto });
 
     // Logic to create a post would go here
     return { message: 'Post updated successfully' };
