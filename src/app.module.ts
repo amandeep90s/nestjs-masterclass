@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
+import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -21,7 +22,7 @@ import { UsersModule } from './users/users.module';
       inject: [],
       useFactory: () => ({
         type: 'postgres',
-        entities: [],
+        entities: [User],
         synchronize: process.env.DB_SYNCHRONIZE === 'true',
         port: Number(process.env.DB_PORT),
         host: process.env.DB_HOST,
