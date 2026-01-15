@@ -10,6 +10,7 @@ import {
   IsString,
   IsUrl,
   Matches,
+  MaxLength,
   MinLength,
   ValidateNested,
 } from 'class-validator';
@@ -20,11 +21,14 @@ export class CreatePostDto {
   @ApiProperty({ description: 'Title of the post', example: 'My First Post' })
   @IsString()
   @MinLength(4, { message: 'Title must be at least 4 characters long' })
+  @MaxLength(512, { message: 'Title must be at most 512 characters long' })
   @IsNotEmpty({ message: 'Title is required' })
   title: string;
 
   @ApiProperty({ description: 'Slug for the post', example: 'my-first-post' })
   @IsString()
+  @MinLength(4, { message: 'Slug must be at least 4 characters long' })
+  @MaxLength(256, { message: 'Slug must be at most 256 characters long' })
   @IsNotEmpty({ message: 'Slug is required' })
   @Matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
     message: 'A slug should be all small letters and hyphens only',
@@ -73,6 +77,9 @@ export class CreatePostDto {
     example: 'https://example.com/image.jpg',
   })
   @IsOptional()
+  @MaxLength(1024, {
+    message: 'Featured image URL must be at most 1024 characters long',
+  })
   @IsUrl()
   featuredImageUrl?: string;
 
