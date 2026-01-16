@@ -14,8 +14,8 @@ import {
   MinLength,
   ValidateNested,
 } from 'class-validator';
+import { CreatePostMetaOptionsDto } from 'src/meta-options/dtos';
 import { EPostStatus, EPostType } from '../enums';
-import { CreatePostMetaOptionsDto } from './create-post-meta-options.dto';
 
 export class CreatePostDto {
   @ApiProperty({ description: 'Title of the post', example: 'My First Post' })
