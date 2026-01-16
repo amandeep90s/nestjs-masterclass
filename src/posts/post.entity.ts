@@ -1,5 +1,5 @@
+import { CreatePostMetaOptionsDto } from 'src/meta-options/dtos';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { CreatePostMetaOptionsDto } from './dtos';
 import { EPostStatus, EPostType } from './enums';
 
 @Entity()
