@@ -1,5 +1,11 @@
-import { CreatePostMetaOptionsDto } from 'src/meta-options/dtos';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { MetaOption } from 'src/meta-options/meta-option.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { EPostStatus, EPostType } from './enums';
 
 @Entity()
@@ -63,8 +69,10 @@ export class Post {
   })
   publishedOn?: Date;
 
+  @OneToOne(() => MetaOption)
+  @JoinColumn()
+  metaOptions?: MetaOption;
+
   // TODO: Implement relations for tags and meta options
   tags?: string[];
-
-  metaOptions?: CreatePostMetaOptionsDto[];
 }
