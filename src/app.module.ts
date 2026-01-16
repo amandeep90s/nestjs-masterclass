@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UsersModule } from './users/users.module';
         database: process.env.DB_DATABASE,
       }),
     }),
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
