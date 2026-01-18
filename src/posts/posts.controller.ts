@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -44,6 +45,12 @@ export class PostsController {
     description:
       'You will get a 200 response if your post is retrieved successfully',
   })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'The ID of the post to retrieve',
+    example: 1,
+  })
   @Get('/:id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.postsService.findOne(id);
@@ -67,5 +74,22 @@ export class PostsController {
     @Body() updatePostDto: UpdatePostDto,
   ) {
     return this.postsService.update(id, updatePostDto);
+  }
+
+  @ApiOperation({ summary: 'Deletes an existing blog post' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'You will get a 200 response if your post is deleted successfully',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'The ID of the post to delete',
+    example: 1,
+  })
+  @Delete('/:id')
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.postsService.delete(id);
   }
 }
