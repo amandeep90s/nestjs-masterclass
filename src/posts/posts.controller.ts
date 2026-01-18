@@ -16,9 +16,15 @@ import { PostsService } from './providers/posts.service';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Get('{/:userId}')
-  findAll(@Param('userId') userId: string) {
-    return this.postsService.findAll(userId);
+  @ApiOperation({ summary: 'Retrieves all blog posts' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'You will get a 200 response if your posts are retrieved successfully',
+  })
+  @Get()
+  findAll() {
+    return this.postsService.findAll();
   }
 
   @ApiOperation({ summary: 'Creates a new blog post' })
@@ -30,6 +36,17 @@ export class PostsController {
   @Post()
   create(@Body() createPostDto: CreatePostDto) {
     return this.postsService.create(createPostDto);
+  }
+
+  @ApiOperation({ summary: 'Retrieves a blog post by ID' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'You will get a 200 response if your post is retrieved successfully',
+  })
+  @Get('/:id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.postsService.findOne(id);
   }
 
   @ApiOperation({ summary: 'Updates an existing blog post' })

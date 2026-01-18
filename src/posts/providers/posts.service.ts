@@ -26,13 +26,28 @@ export class PostsService {
     private readonly metaOptionsRepository: Repository<MetaOption>,
   ) {}
 
-  public findAll(userId: string) {
-    const user = this.usersService.findById(Number(userId));
+  public async findAll() {
+    return await this.postsRepository.find({
+      relations: {
+        metaOptions: true,
+      },
+    });
+  }
 
-    return [
-      { id: 1, title: 'First Post', user },
-      { id: 2, title: 'Second Post', user },
-    ];
+  /**
+   * Find a post by its ID
+   * @param id - ID of the post to find
+   */
+  public async findOne(id: number) {
+    const post = await this.postsRepository.findOne({
+      where: { id },
+    });
+
+    if (!post) {
+      throw new Error('Post not found');
+    }
+
+    return post;
   }
 
   /**
