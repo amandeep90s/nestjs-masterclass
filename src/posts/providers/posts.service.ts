@@ -80,19 +80,8 @@ export class PostsService {
    * @param id - ID of the post to delete
    */
   public async delete(id: number) {
-    const post = await this.postsRepository.findOneBy({ id });
-
-    if (!post) {
-      throw new Error('Post not found');
-    }
-
     // Delete the post
     await this.postsRepository.delete(id);
-
-    // Also delete associated meta options if they exist
-    if (post.metaOptions) {
-      await this.metaOptionsRepository.delete(post.metaOptions.id);
-    }
 
     return { message: 'Post deleted successfully', deleted: true, id };
   }

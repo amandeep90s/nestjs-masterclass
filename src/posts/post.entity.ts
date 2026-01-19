@@ -1,11 +1,5 @@
 import { MetaOption } from 'src/meta-options/meta-option.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { EPostStatus, EPostType } from './enums';
 
 @Entity()
@@ -74,7 +68,6 @@ export class Post {
     nullable: true,
     eager: true,
   })
-  @JoinColumn()
   metaOptions?: MetaOption;
 
   // TODO: Implement relations for tags and meta options
