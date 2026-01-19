@@ -1,5 +1,12 @@
 import { MetaOption } from 'src/meta-options/meta-option.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/users/user.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { EPostStatus, EPostType } from './enums';
 
 @Entity()
@@ -69,6 +76,9 @@ export class Post {
     eager: true,
   })
   metaOptions?: MetaOption;
+
+  @ManyToOne(() => User, (user) => user.posts)
+  author: User;
 
   // TODO: Implement relations for tags and meta options
   tags?: string[];
