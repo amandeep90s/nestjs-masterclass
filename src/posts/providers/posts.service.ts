@@ -56,8 +56,13 @@ export class PostsService {
    * @returns
    */
   public async create(createPostDto: CreatePostDto) {
+    // Find author by ID
+    const author = await this.usersService.findById(createPostDto.authorId);
+    if (!author) {
+      throw new Error('Author not found');
+    }
     // Create and save meta options if provided
-    const post = this.postsRepository.create(createPostDto);
+    const post = this.postsRepository.create({ ...createPostDto, author });
 
     return await this.postsRepository.save(post);
   }

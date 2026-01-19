@@ -51,12 +51,14 @@ export class UsersService {
    * @param getUserParamDto
    * @returns
    */
-  public findById(id: number) {
-    return {
-      id,
-      firstName: 'John',
-      email: 'john@example.com',
-    };
+  public async findById(id: number) {
+    const user = await this.usersRepository.findOneBy({ id });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return user;
   }
 
   public async create(createUserDto: CreateUserDto) {
