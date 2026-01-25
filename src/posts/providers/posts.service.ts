@@ -90,11 +90,34 @@ export class PostsService {
    * @param updatePostDto - Data Transfer Object containing updated post details
    * @returns
    */
-  public update(id: number, updatePostDto: UpdatePostDto) {
-    console.log({ id, updatePostDto });
+  public async update(id: number, updatePostDto: UpdatePostDto) {
+    // Find tags by their IDs if provided
+    let tags: Tag[] = [];
+    if (updatePostDto.tags && updatePostDto.tags.length > 0) {
+      tags = await this.tagsService.findMultipleByIds(updatePostDto.tags);
+    }
 
-    // Logic to update a post would go here
-    return { message: 'Post updated successfully' };
+    // Find the existing post
+    const post = await this.postsRepository.findOne({
+      where: { id },
+    });
+
+    if (!post) {
+      throw new Error('Post not found');
+    }
+
+    // Update post properties
+    post.title = updatePostDto.title ?? post.title;
+    post.content = updatePostDto.content ?? post.content;
+    post.status = updatePostDto.status ?? post.status;
+    post.postType = updatePostDto.postType ?? post.postType;
+    post.slug = updatePostDto.slug ?? post.slug;
+    post.featuredImageUrl =
+      updatePostDto.featuredImageUrl ?? post.featuredImageUrl;
+    post.publishedOn = updatePostDto.publishedOn ?? post.publishedOn;
+    post.tags = tags.length > 0 ? tags : post.tags;
+
+    return await this.postsRepository.save(post);
   }
 
   /**
