@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 
+import environmentValidation from './config/environment.validation';
 import { MetaOptionsModule } from './meta-options/meta-options.module';
 import { PostsModule } from './posts/posts.module';
 import { TagsModule } from './tags/tags.module';
@@ -22,6 +23,7 @@ const ENV = process.env.NODE_ENV;
       // envFilePath: ['.env.development'], // for testing purpose
       envFilePath: !ENV ? '.env' : `.env.${ENV}`,
       load: [appConfig, databaseConfig],
+      validationSchema: environmentValidation,
     }),
     UsersModule,
     PostsModule,
