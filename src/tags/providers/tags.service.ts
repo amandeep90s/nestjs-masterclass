@@ -32,4 +32,15 @@ export class TagsService {
       },
     });
   }
+
+  /**
+   * Delete a tag by its ID
+   * @param postId
+   * @returns
+   */
+  public async delete(postId: number) {
+    await this.tagsRepository.delete(postId);
+
+    return { deleted: true, id: postId };
+  }
 }
