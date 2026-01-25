@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsEnum,
+  IsInt,
   IsISO8601,
   IsJSON,
   IsNotEmpty,
@@ -14,8 +15,8 @@ import {
   MinLength,
   ValidateNested,
 } from 'class-validator';
+import { CreatePostMetaOptionsDto } from 'src/meta-options/dtos';
 import { EPostStatus, EPostType } from '../enums';
-import { CreatePostMetaOptionsDto } from './create-post-meta-options.dto';
 
 export class CreatePostDto {
   @ApiProperty({ description: 'Title of the post', example: 'My First Post' })
@@ -92,40 +93,30 @@ export class CreatePostDto {
   publishedOn?: Date;
 
   @ApiPropertyOptional({
-    description: 'Array of tags associated with the post passed as strings',
-    example: ['nestjs', 'typescript'],
+    description: 'Array of tags associated with the post passed as IDs',
+    example: [1, 2, 3],
   })
   @IsOptional()
   @IsArray()
-  @IsString({ each: true, message: 'Each tag must be a string' })
-  @MinLength(3, {
-    each: true,
-    message: 'Each tag must be at least 3 characters long',
-  })
-  tags?: string[];
+  @IsInt({ each: true, message: 'Each tag must be an integer' })
+  tags?: number[];
 
   @ApiPropertyOptional({
-    type: 'array',
-    required: false,
     description: 'Meta options for the post',
-    items: {
-      type: 'object',
-      properties: {
-        key: {
-          type: 'string',
-          description: 'Key for the meta option',
-          example: 'meta_key',
-        },
-        value: {
-          description: 'Value for the meta option',
-          example: 'meta_value',
-        },
-      },
-    },
+    type: CreatePostMetaOptionsDto,
   })
   @IsOptional()
-  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreatePostMetaOptionsDto)
-  metaOptions?: CreatePostMetaOptionsDto[];
+  metaOptions?: CreatePostMetaOptionsDto;
+
+  @ApiProperty({
+    type: 'integer',
+    required: true,
+    description: 'ID of the author creating the post',
+    example: 1,
+  })
+  @IsNotEmpty()
+  @IsInt()
+  authorId: number;
 }

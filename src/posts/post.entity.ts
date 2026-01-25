@@ -1,5 +1,18 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { CreatePostMetaOptionsDto } from './dtos';
+import { MetaOption } from 'src/meta-options/meta-option.entity';
+import { Tag } from 'src/tags/tag.entity';
+import { User } from 'src/users/user.entity';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { EPostStatus, EPostType } from './enums';
 
 @Entity()
@@ -63,8 +76,26 @@ export class Post {
   })
   publishedOn?: Date;
 
-  // TODO: Implement relations for tags and meta options
-  tags?: string[];
+  @OneToOne(() => MetaOption, (metaOptions) => metaOptions.post, {
+    cascade: true,
+    nullable: true,
+    eager: true,
+  })
+  metaOptions?: MetaOption;
 
-  metaOptions?: CreatePostMetaOptionsDto[];
+  @ManyToOne(() => User, (user) => user.posts)
+  author: User;
+
+  @ManyToMany(() => Tag, (tag) => tag.posts, { eager: true })
+  @JoinTable()
+  tags?: Tag[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }
