@@ -1,8 +1,11 @@
 import { MetaOption } from 'src/meta-options/meta-option.entity';
+import { Tag } from 'src/tags/tag.entity';
 import { User } from 'src/users/user.entity';
 import {
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -80,6 +83,7 @@ export class Post {
   @ManyToOne(() => User, (user) => user.posts)
   author: User;
 
-  // TODO: Implement relations for tags and meta options
-  tags?: string[];
+  @ManyToMany(() => Tag)
+  @JoinTable()
+  tags?: Tag[];
 }

@@ -93,17 +93,13 @@ export class CreatePostDto {
   publishedOn?: Date;
 
   @ApiPropertyOptional({
-    description: 'Array of tags associated with the post passed as strings',
-    example: ['nestjs', 'typescript'],
+    description: 'Array of tags associated with the post passed as IDs',
+    example: [1, 2, 3],
   })
   @IsOptional()
   @IsArray()
-  @IsString({ each: true, message: 'Each tag must be a string' })
-  @MinLength(3, {
-    each: true,
-    message: 'Each tag must be at least 3 characters long',
-  })
-  tags?: string[];
+  @IsInt({ each: true, message: 'Each tag must be an integer' })
+  tags?: number[];
 
   @ApiPropertyOptional({
     description: 'Meta options for the post',
