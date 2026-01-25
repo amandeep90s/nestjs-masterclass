@@ -130,4 +130,16 @@ export class PostsService {
 
     return { message: 'Post deleted successfully', deleted: true, id };
   }
+
+  /**
+   * Soft delete a post by its ID
+   * @param id
+   * @returns
+   */
+  public async softDelete(id: number) {
+    // Soft delete the post
+    await this.postsRepository.softDelete(id);
+
+    return { message: 'Post soft-deleted successfully', deleted: true, id };
+  }
 }

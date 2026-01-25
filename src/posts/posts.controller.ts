@@ -92,4 +92,21 @@ export class PostsController {
   delete(@Param('id', ParseIntPipe) id: number) {
     return this.postsService.delete(id);
   }
+
+  @ApiOperation({ summary: 'Deletes an existing blog post' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'You will get a 200 response if your post is deleted successfully',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'The ID of the post to delete',
+    example: 1,
+  })
+  @Delete('/soft-delete/:id')
+  softDelete(@Param('id', ParseIntPipe) id: number) {
+    return this.postsService.softDelete(id);
+  }
 }
