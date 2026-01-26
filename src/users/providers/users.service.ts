@@ -3,6 +3,7 @@ import {
   forwardRef,
   Inject,
   Injectable,
+  NotFoundException,
   RequestTimeoutException,
 } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
@@ -80,15 +81,30 @@ export class UsersService {
    * @returns
    */
   public async findById(id: number) {
-    const user = await this.usersRepository.findOneBy({ id });
+    let user: User | null = null;
+    try {
+      user = await this.usersRepository.findOneBy({ id });
+    } catch {
+      throw new RequestTimeoutException(
+        'Unable to process request at this time please try again later',
+        {
+          description: 'Error connecting to the database',
+        },
+      );
+    }
 
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
 
     return user;
   }
 
+  /**
+   * Create a new user
+   * @param createUserDto
+   * @returns
+   */
   public async create(createUserDto: CreateUserDto) {
     // Check is email already exists
     let existingUser: User | null = null;
@@ -114,9 +130,15 @@ export class UsersService {
 
     // Create new user
     const newUserObj = this.usersRepository.create(createUserDto);
-
-    const newUser = await this.usersRepository.save(newUserObj);
-
-    return newUser;
+    try {
+      return await this.usersRepository.save(newUserObj);
+    } catch {
+      throw new RequestTimeoutException(
+        'Unable to process request at this time please try again later',
+        {
+          description: 'Error connecting to the database',
+        },
+      );
+    }
   }
 }
