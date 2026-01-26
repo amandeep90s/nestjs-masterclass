@@ -1,4 +1,10 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  forwardRef,
+  Inject,
+  Injectable,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -85,12 +91,25 @@ export class UsersService {
 
   public async create(createUserDto: CreateUserDto) {
     // Check is email already exists
-    const existingUser = await this.usersRepository.findOne({
-      where: { email: createUserDto.email },
-    });
+    let existingUser: User | null = null;
+
+    try {
+      existingUser = await this.usersRepository.findOne({
+        where: { email: createUserDto.email },
+      });
+    } catch {
+      // Might save the details of the exception
+      // Information which is sensitive should not be logged
+      throw new RequestTimeoutException(
+        'Unable to process request at this time please try again later',
+        {
+          description: 'Error connecting to the database',
+        },
+      );
+    }
 
     if (existingUser) {
-      throw new Error('Email already in use');
+      throw new ConflictException('Email already in use');
     }
 
     // Create new user
