@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { TagsService } from 'src/tags/providers/tags.service';
@@ -91,19 +96,45 @@ export class PostsService {
    * @returns
    */
   public async update(id: number, updatePostDto: UpdatePostDto) {
-    // Find tags by their IDs if provided
+    let post: Post | null = null;
     let tags: Tag[] = [];
+
+    // Find tags by their IDs if provided
     if (updatePostDto.tags && updatePostDto.tags.length > 0) {
-      tags = await this.tagsService.findMultipleByIds(updatePostDto.tags);
+      try {
+        tags = await this.tagsService.findMultipleByIds(updatePostDto.tags);
+      } catch {
+        throw new RequestTimeoutException(
+          'Unable to process request at this time please try again later',
+          {
+            description: 'Error connecting to the database',
+          },
+        );
+      }
+    }
+
+    if (tags.length !== updatePostDto.tags?.length) {
+      throw new BadRequestException(
+        'Please check your tag Ids and ensure they are correct',
+      );
     }
 
     // Find the existing post
-    const post = await this.postsRepository.findOne({
-      where: { id },
-    });
+    try {
+      post = await this.postsRepository.findOne({
+        where: { id },
+      });
+    } catch {
+      throw new RequestTimeoutException(
+        'Unable to process request at this time please try again later',
+        {
+          description: 'Error connecting to the database',
+        },
+      );
+    }
 
     if (!post) {
-      throw new Error('Post not found');
+      throw new NotFoundException('Post not found');
     }
 
     // Update post properties
@@ -117,7 +148,18 @@ export class PostsService {
     post.publishedOn = updatePostDto.publishedOn ?? post.publishedOn;
     post.tags = tags.length > 0 ? tags : post.tags;
 
-    return await this.postsRepository.save(post);
+    try {
+      await this.postsRepository.save(post);
+    } catch {
+      throw new RequestTimeoutException(
+        'Unable to process request at this time please try again later',
+        {
+          description: 'Error connecting to the database',
+        },
+      );
+    }
+
+    return post;
   }
 
   /**
