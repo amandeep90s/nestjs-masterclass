@@ -15,7 +15,9 @@ import { AuthService } from 'src/auth/providers/auth.service';
 import { Repository } from 'typeorm';
 import profileConfig from '../config/profile.config';
 import { CreateUserDto } from '../dtos';
+import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
 import { User } from '../user.entity';
+import { UsersCreateManyProvider } from './users-create-many.provider';
 
 /**
  * Class to connect to Users table and perform business operations
@@ -47,6 +49,11 @@ export class UsersService {
      */
     @Inject(profileConfig.KEY)
     private readonly profileConfiguration: ConfigType<typeof profileConfig>,
+
+    /**
+     * Inject UsersCreateManyProvider
+     */
+    private readonly usersCreateManyProvider: UsersCreateManyProvider,
   ) {}
   /**
    * Fetch all users with pagination
@@ -58,6 +65,8 @@ export class UsersService {
     page: number,
     limit: number,
   ): Array<{ firstName: string; email: string }> {
+    console.log({ page, limit });
+
     throw new HttpException(
       {
         status: HttpStatus.NOT_IMPLEMENTED,
@@ -138,5 +147,14 @@ export class UsersService {
         },
       );
     }
+  }
+
+  /**
+   * Create many users
+   * @param createManyUsersDto
+   * @returns
+   */
+  public async createMany(createManyUsersDto: CreateManyUsersDto) {
+    return await this.usersCreateManyProvider.createMany(createManyUsersDto);
   }
 }
