@@ -1,4 +1,13 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  NotFoundException,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -49,23 +58,19 @@ export class UsersService {
     page: number,
     limit: number,
   ): Array<{ firstName: string; email: string }> {
-    console.log({ page, limit });
-
-    this.authService.isAuthenticated('123');
-
-    const environment = this.configService.get<string>('NODE_ENV');
-    console.log({ environment }, this.profileConfiguration);
-
-    return [
+    throw new HttpException(
       {
-        firstName: 'John',
-        email: 'john@example.com',
+        status: HttpStatus.NOT_IMPLEMENTED,
+        error: 'The API endpoint is not implemented yet.',
+        fileName: 'src/users/providers/users.service.ts',
+        lineNumber: 65,
       },
+      HttpStatus.NOT_IMPLEMENTED,
       {
-        firstName: 'Jane',
-        email: 'jane@example.com',
+        cause: new Error('Not Implemented'),
+        description: 'This method is a placeholder and needs implementation.',
       },
-    ];
+    );
   }
 
   /**
@@ -74,30 +79,64 @@ export class UsersService {
    * @returns
    */
   public async findById(id: number) {
-    const user = await this.usersRepository.findOneBy({ id });
+    let user: User | null = null;
+    try {
+      user = await this.usersRepository.findOneBy({ id });
+    } catch {
+      throw new RequestTimeoutException(
+        'Unable to process request at this time please try again later',
+        {
+          description: 'Error connecting to the database',
+        },
+      );
+    }
 
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
 
     return user;
   }
 
+  /**
+   * Create a new user
+   * @param createUserDto
+   * @returns
+   */
   public async create(createUserDto: CreateUserDto) {
     // Check is email already exists
-    const existingUser = await this.usersRepository.findOne({
-      where: { email: createUserDto.email },
-    });
+    let existingUser: User | null = null;
+
+    try {
+      existingUser = await this.usersRepository.findOne({
+        where: { email: createUserDto.email },
+      });
+    } catch {
+      // Might save the details of the exception
+      // Information which is sensitive should not be logged
+      throw new RequestTimeoutException(
+        'Unable to process request at this time please try again later',
+        {
+          description: 'Error connecting to the database',
+        },
+      );
+    }
 
     if (existingUser) {
-      throw new Error('Email already in use');
+      throw new ConflictException('Email already in use');
     }
 
     // Create new user
     const newUserObj = this.usersRepository.create(createUserDto);
-
-    const newUser = await this.usersRepository.save(newUserObj);
-
-    return newUser;
+    try {
+      return await this.usersRepository.save(newUserObj);
+    } catch {
+      throw new RequestTimeoutException(
+        'Unable to process request at this time please try again later',
+        {
+          description: 'Error connecting to the database',
+        },
+      );
+    }
   }
 }
