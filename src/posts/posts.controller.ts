@@ -7,10 +7,12 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDto, UpdatePostDto } from './dtos';
 import { PostsService } from './providers/posts.service';
+import { GetPostsDto } from './dtos/get-posts.dto';
 
 @Controller('posts')
 @ApiTags('Posts')
@@ -24,7 +26,8 @@ export class PostsController {
       'You will get a 200 response if your posts are retrieved successfully',
   })
   @Get()
-  findAll() {
+  findAll(@Query() postQuery: GetPostsDto) {
+    console.log(postQuery);
     return this.postsService.findAll();
   }
 
