@@ -1,6 +1,8 @@
 import {
   ConflictException,
   forwardRef,
+  HttpException,
+  HttpStatus,
   Inject,
   Injectable,
   NotFoundException,
@@ -56,23 +58,19 @@ export class UsersService {
     page: number,
     limit: number,
   ): Array<{ firstName: string; email: string }> {
-    console.log({ page, limit });
-
-    this.authService.isAuthenticated('123');
-
-    const environment = this.configService.get<string>('NODE_ENV');
-    console.log({ environment }, this.profileConfiguration);
-
-    return [
+    throw new HttpException(
       {
-        firstName: 'John',
-        email: 'john@example.com',
+        status: HttpStatus.NOT_IMPLEMENTED,
+        error: 'The API endpoint is not implemented yet.',
+        fileName: 'src/users/providers/users.service.ts',
+        lineNumber: 65,
       },
+      HttpStatus.NOT_IMPLEMENTED,
       {
-        firstName: 'Jane',
-        email: 'jane@example.com',
+        cause: new Error('Not Implemented'),
+        description: 'This method is a placeholder and needs implementation.',
       },
-    ];
+    );
   }
 
   /**
