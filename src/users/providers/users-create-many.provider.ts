@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { CreateUserDto } from '../dtos';
+import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
 import { User } from '../user.entity';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class UsersCreateManyProvider {
    * Create multiple users
    * @param createUsersDto
    */
-  public async createMany(createUsersDto: CreateUserDto[]) {
+  public async createMany(createManyUsersDto: CreateManyUsersDto) {
     const newUsers: User[] = [];
 
     // Create query runner instance
@@ -29,7 +29,7 @@ export class UsersCreateManyProvider {
     await queryRunner.startTransaction();
 
     try {
-      for (const user of createUsersDto) {
+      for (const user of createManyUsersDto.users) {
         const newUser = queryRunner.manager.create(User, user);
         const result = await queryRunner.manager.save(newUser);
         newUsers.push(result);

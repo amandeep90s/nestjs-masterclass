@@ -15,6 +15,7 @@ import { AuthService } from 'src/auth/providers/auth.service';
 import { Repository } from 'typeorm';
 import profileConfig from '../config/profile.config';
 import { CreateUserDto } from '../dtos';
+import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
 import { User } from '../user.entity';
 import { UsersCreateManyProvider } from './users-create-many.provider';
 
@@ -149,10 +150,11 @@ export class UsersService {
   }
 
   /**
-   * Create multiple users
-   * @param createUsersDto
+   * Create many users
+   * @param createManyUsersDto
+   * @returns
    */
-  public async createMany(createUsersDto: CreateUserDto[]) {
-    return await this.usersCreateManyProvider.createMany(createUsersDto);
+  public async createMany(createManyUsersDto: CreateManyUsersDto) {
+    return await this.usersCreateManyProvider.createMany(createManyUsersDto);
   }
 }
