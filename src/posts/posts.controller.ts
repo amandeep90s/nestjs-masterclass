@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDto, UpdatePostDto } from './dtos';
-import { PostsService } from './providers/posts.service';
 import { GetPostsDto } from './dtos/get-posts.dto';
+import { PostsService } from './providers/posts.service';
 
 @Controller('posts')
 @ApiTags('Posts')
@@ -28,7 +28,7 @@ export class PostsController {
   @Get()
   findAll(@Query() postQuery: GetPostsDto) {
     console.log(postQuery);
-    return this.postsService.findAll();
+    return this.postsService.findAll(postQuery);
   }
 
   @ApiOperation({ summary: 'Creates a new blog post' })
