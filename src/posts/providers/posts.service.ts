@@ -11,6 +11,7 @@ import { Tag } from 'src/tags/tag.entity';
 import { UsersService } from 'src/users/providers/users.service';
 import { Repository } from 'typeorm';
 import { CreatePostDto, UpdatePostDto } from '../dtos';
+import { GetPostsDto } from '../dtos/get-posts.dto';
 import { Post } from '../post.entity';
 
 @Injectable()
@@ -37,13 +38,15 @@ export class PostsService {
     private readonly tagsService: TagsService,
   ) {}
 
-  public async findAll() {
+  public async findAll(postQuery: GetPostsDto) {
     return await this.postsRepository.find({
       relations: {
         metaOptions: true,
         author: true,
         tags: true,
       },
+      take: postQuery.limit,
+      skip: postQuery.page ? (postQuery.page - 1) * postQuery.limit : 0,
     });
   }
 
@@ -145,7 +148,9 @@ export class PostsService {
     post.slug = updatePostDto.slug ?? post.slug;
     post.featuredImageUrl =
       updatePostDto.featuredImageUrl ?? post.featuredImageUrl;
-    post.publishedOn = updatePostDto.publishedOn ?? post.publishedOn;
+    post.publishOn = updatePostDto.publishOn
+      ? new Date(updatePostDto.publishOn)
+      : post.publishOn;
     post.tags = tags.length > 0 ? tags : post.tags;
 
     try {

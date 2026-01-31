@@ -71,10 +71,10 @@ export class Post {
   featuredImageUrl?: string;
 
   @Column({
-    type: 'timestamp',
+    type: 'timestamp', // 'datetime' in mysql
     nullable: true,
   })
-  publishedOn?: Date;
+  publishOn?: Date;
 
   @OneToOne(() => MetaOption, (metaOptions) => metaOptions.post, {
     cascade: true,

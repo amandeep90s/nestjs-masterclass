@@ -85,12 +85,12 @@ export class CreatePostDto {
   featuredImageUrl?: string;
 
   @ApiPropertyOptional({
-    description: 'Publication date of the post',
-    example: '2025-05-05T07:45:32+0000',
+    description: 'The date on which the blog post is published',
+    example: '2024-03-16T07:46:32+0000',
   })
   @IsISO8601()
   @IsOptional()
-  publishedOn?: Date;
+  publishOn?: string;
 
   @ApiPropertyOptional({
     description: 'Array of tags associated with the post passed as IDs',
