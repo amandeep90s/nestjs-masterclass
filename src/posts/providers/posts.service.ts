@@ -145,7 +145,9 @@ export class PostsService {
     post.slug = updatePostDto.slug ?? post.slug;
     post.featuredImageUrl =
       updatePostDto.featuredImageUrl ?? post.featuredImageUrl;
-    post.publishedOn = updatePostDto.publishedOn ?? post.publishedOn;
+    post.publishOn = updatePostDto.publishOn
+      ? new Date(updatePostDto.publishOn)
+      : post.publishOn;
     post.tags = tags.length > 0 ? tags : post.tags;
 
     try {
