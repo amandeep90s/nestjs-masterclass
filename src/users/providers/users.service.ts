@@ -1,5 +1,4 @@
 import {
-  ConflictException,
   forwardRef,
   HttpException,
   HttpStatus,
@@ -17,6 +16,7 @@ import profileConfig from '../config/profile.config';
 import { CreateUserDto } from '../dtos';
 import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
 import { User } from '../user.entity';
+import { CreateUserProvider } from './create-user.provider';
 import { UsersCreateManyProvider } from './users-create-many.provider';
 
 /**
@@ -54,6 +54,11 @@ export class UsersService {
      * Inject UsersCreateManyProvider
      */
     private readonly usersCreateManyProvider: UsersCreateManyProvider,
+
+    /**
+     * Inject CreateUserProvider
+     */
+    private readonly createUserProvider: CreateUserProvider,
   ) {}
   /**
    * Fetch all users with pagination
@@ -113,40 +118,7 @@ export class UsersService {
    * @returns
    */
   public async create(createUserDto: CreateUserDto) {
-    // Check is email already exists
-    let existingUser: User | null = null;
-
-    try {
-      existingUser = await this.usersRepository.findOne({
-        where: { email: createUserDto.email },
-      });
-    } catch {
-      // Might save the details of the exception
-      // Information which is sensitive should not be logged
-      throw new RequestTimeoutException(
-        'Unable to process request at this time please try again later',
-        {
-          description: 'Error connecting to the database',
-        },
-      );
-    }
-
-    if (existingUser) {
-      throw new ConflictException('Email already in use');
-    }
-
-    // Create new user
-    const newUserObj = this.usersRepository.create(createUserDto);
-    try {
-      return await this.usersRepository.save(newUserObj);
-    } catch {
-      throw new RequestTimeoutException(
-        'Unable to process request at this time please try again later',
-        {
-          description: 'Error connecting to the database',
-        },
-      );
-    }
+    return await this.createUserProvider.create(createUserDto);
   }
 
   /**
