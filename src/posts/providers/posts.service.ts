@@ -5,6 +5,7 @@ import {
   RequestTimeoutException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { TagsService } from 'src/tags/providers/tags.service';
 import { Tag } from 'src/tags/tag.entity';
@@ -36,18 +37,17 @@ export class PostsService {
      * Inject tagsService
      */
     private readonly tagsService: TagsService,
+    /**
+     * Injecting paginationProvider
+     */
+    private readonly paginationProvider: PaginationProvider,
   ) {}
 
   public async findAll(postQuery: GetPostsDto) {
-    return await this.postsRepository.find({
-      relations: {
-        metaOptions: true,
-        author: true,
-        tags: true,
-      },
-      take: postQuery.limit,
-      skip: postQuery.page ? (postQuery.page - 1) * postQuery.limit : 0,
-    });
+    return await this.paginationProvider.paginateQuery<Post>(
+      { limit: postQuery.limit, page: postQuery.page },
+      this.postsRepository,
+    );
   }
 
   /**
