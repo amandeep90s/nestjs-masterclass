@@ -5,8 +5,11 @@ import {
   RequestTimeoutException,
   UnauthorizedException,
 } from '@nestjs/common';
+import type { ConfigType } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { HashingProvider } from 'src/auth/providers/hashing.provider';
 import { UsersService } from 'src/users/providers/users.service';
+import jwtConfig from '../config/jwt.config';
 import { SignInDto } from '../dtos/signin.dto';
 
 @Injectable()
@@ -22,6 +25,17 @@ export class SignInProvider {
      * Injecting hashingProvider to validate password
      */
     private readonly hashingProvider: HashingProvider,
+
+    /**
+     * Injecting jwtService to generate JWT tokens
+     */
+    private readonly jwtService: JwtService,
+
+    /**
+     * Injecting jwtConfiguration
+     */
+    @Inject(jwtConfig.KEY)
+    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
   ) {}
 
   public async signIn(signInDto: SignInDto) {
@@ -52,7 +66,19 @@ export class SignInProvider {
       throw new UnauthorizedException('Invalid credentials provided');
     }
 
-    // Send confirmation
-    return { message: 'Sign-in successful', userId: user?.id };
+    const accessToken = await this.jwtService.signAsync(
+      {
+        sub: user.id,
+        email: user.email,
+      },
+      {
+        audience: this.jwtConfiguration.tokenAudience,
+        issuer: this.jwtConfiguration.tokenIssuer,
+        secret: this.jwtConfiguration.secret,
+        expiresIn: this.jwtConfiguration.accessTokenTtl,
+      },
+    );
+
+    return { accessToken };
   }
 }
