@@ -5,6 +5,7 @@ import {
   RequestTimeoutException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IPaginated } from 'src/common/pagination/interfaces/paginated.interface';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { TagsService } from 'src/tags/providers/tags.service';
@@ -43,7 +44,7 @@ export class PostsService {
     private readonly paginationProvider: PaginationProvider,
   ) {}
 
-  public async findAll(postQuery: GetPostsDto) {
+  public async findAll(postQuery: GetPostsDto): Promise<IPaginated<Post>> {
     return await this.paginationProvider.paginateQuery<Post>(
       { limit: postQuery.limit, page: postQuery.page },
       this.postsRepository,
