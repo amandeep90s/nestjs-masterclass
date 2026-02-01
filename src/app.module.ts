@@ -13,6 +13,7 @@ import { MetaOptionsModule } from './meta-options/meta-options.module';
 import { PostsModule } from './posts/posts.module';
 import { TagsModule } from './tags/tags.module';
 import { UsersModule } from './users/users.module';
+import { PaginationModule } from './common/pagination/pagination.module';
 
 const ENV = process.env.NODE_ENV;
 
@@ -35,7 +36,7 @@ const ENV = process.env.NODE_ENV;
         type: 'postgres',
         // entities: [User], // No need to specify entities when autoLoadEntities is true
         autoLoadEntities: configService.get('database.autoLoadEntities'),
-        synchronize: configService.get('database.synchronize') === 'true',
+        synchronize: configService.get('database.synchronize'),
         port: Number(configService.get('database.port')),
         host: configService.get('database.host'),
         username: configService.get('database.username'),
@@ -45,6 +46,7 @@ const ENV = process.env.NODE_ENV;
     }),
     TagsModule,
     MetaOptionsModule,
+    PaginationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

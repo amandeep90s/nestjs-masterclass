@@ -12,6 +12,9 @@ async function bootstrap() {
       whitelist: true, // Strip properties that do not have any decorators
       transform: true, // Automatically transform payloads to be objects typed according to their DTO classes
       forbidNonWhitelisted: true, // Throw an error if non-whitelisted properties are present
+      transformOptions: {
+        enableImplicitConversion: true, // Enable implicit conversion for primitive types
+      },
     }),
   );
 
@@ -30,5 +33,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   await app.listen(process.env.PORT ?? 3000);
+
+  console.log(`App is running on http://localhost:3000`);
 }
 void bootstrap();

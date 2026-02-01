@@ -7,9 +7,11 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDto, UpdatePostDto } from './dtos';
+import { GetPostsDto } from './dtos/get-posts.dto';
 import { PostsService } from './providers/posts.service';
 
 @Controller('posts')
@@ -24,8 +26,8 @@ export class PostsController {
       'You will get a 200 response if your posts are retrieved successfully',
   })
   @Get()
-  findAll() {
-    return this.postsService.findAll();
+  findAll(@Query() postQuery: GetPostsDto) {
+    return this.postsService.findAll(postQuery);
   }
 
   @ApiOperation({ summary: 'Creates a new blog post' })

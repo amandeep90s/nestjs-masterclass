@@ -5,12 +5,15 @@ import {
   RequestTimeoutException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IPaginated } from 'src/common/pagination/interfaces/paginated.interface';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { TagsService } from 'src/tags/providers/tags.service';
 import { Tag } from 'src/tags/tag.entity';
 import { UsersService } from 'src/users/providers/users.service';
 import { Repository } from 'typeorm';
 import { CreatePostDto, UpdatePostDto } from '../dtos';
+import { GetPostsDto } from '../dtos/get-posts.dto';
 import { Post } from '../post.entity';
 
 @Injectable()
@@ -35,16 +38,17 @@ export class PostsService {
      * Inject tagsService
      */
     private readonly tagsService: TagsService,
+    /**
+     * Injecting paginationProvider
+     */
+    private readonly paginationProvider: PaginationProvider,
   ) {}
 
-  public async findAll() {
-    return await this.postsRepository.find({
-      relations: {
-        metaOptions: true,
-        author: true,
-        tags: true,
-      },
-    });
+  public async findAll(postQuery: GetPostsDto): Promise<IPaginated<Post>> {
+    return await this.paginationProvider.paginateQuery<Post>(
+      { limit: postQuery.limit, page: postQuery.page },
+      this.postsRepository,
+    );
   }
 
   /**
@@ -145,7 +149,9 @@ export class PostsService {
     post.slug = updatePostDto.slug ?? post.slug;
     post.featuredImageUrl =
       updatePostDto.featuredImageUrl ?? post.featuredImageUrl;
-    post.publishedOn = updatePostDto.publishedOn ?? post.publishedOn;
+    post.publishOn = updatePostDto.publishOn
+      ? new Date(updatePostDto.publishOn)
+      : post.publishOn;
     post.tags = tags.length > 0 ? tags : post.tags;
 
     try {
