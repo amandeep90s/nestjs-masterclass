@@ -17,6 +17,7 @@ import { CreateUserDto } from '../dtos';
 import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
 import { User } from '../user.entity';
 import { CreateUserProvider } from './create-user.provider';
+import { FindOneUserByEmailProvider } from './find-one-user-by-email.provider';
 import { UsersCreateManyProvider } from './users-create-many.provider';
 
 /**
@@ -59,6 +60,11 @@ export class UsersService {
      * Inject CreateUserProvider
      */
     private readonly createUserProvider: CreateUserProvider,
+
+    /**
+     * Injecting findOneUserByEmailProvider
+     */
+    private readonly findOneUserByEmailProvider: FindOneUserByEmailProvider,
   ) {}
   /**
    * Fetch all users with pagination
@@ -128,5 +134,9 @@ export class UsersService {
    */
   public async createMany(createManyUsersDto: CreateManyUsersDto) {
     return await this.usersCreateManyProvider.createMany(createManyUsersDto);
+  }
+
+  public async findOneByEmail(email: string): Promise<User | null> {
+    return await this.findOneUserByEmailProvider.findOneByEmail(email);
   }
 }
