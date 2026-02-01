@@ -14,6 +14,10 @@ import { REQUEST_USER_KEY } from 'src/auth/constants/auth.constants';
 interface JwtPayload {
   sub: number;
   email: string;
+  iat: number;
+  exp: number;
+  aud: string;
+  iss: string;
 }
 
 @Injectable()
@@ -50,8 +54,6 @@ export class AccessTokenGuard implements CanActivate {
         token,
         this.jwtConfiguration,
       );
-
-      console.log({ payload });
 
       request[REQUEST_USER_KEY] = payload;
     } catch {
