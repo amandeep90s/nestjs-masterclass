@@ -31,7 +31,7 @@ export class CreateUserProvider {
    * @returns
    */
   public async create(createUserDto: CreateUserDto) {
-    // Check is email already exists
+    // Check if email already exists
     let existingUser: User | null = null;
 
     try {
