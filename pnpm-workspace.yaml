@@ -1,0 +1,5 @@
+allowBuilds:
+  '@compodoc/compodoc': true
+  '@scarf/scarf': true
+  bcrypt: true
+  unrs-resolver: true
