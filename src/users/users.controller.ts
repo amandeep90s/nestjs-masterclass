@@ -11,6 +11,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { EAuthType } from 'src/auth/enums/auth-type.enum';
 import { CreateUserDto, GetUserParamDto } from './dtos';
 import { CreateManyUsersDto } from './dtos/create-many-users.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -60,6 +62,7 @@ export class UsersController {
   }
 
   @Post()
+  @Auth(EAuthType.None) // This route does not require authentication
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
@@ -71,14 +74,11 @@ export class UsersController {
 
   @Put(':id')
   update(@Body() updateUserDto: UpdateUserDto) {
-    console.log({ updateUserDto });
     return 'This action updates a user';
   }
 
   @Delete(':id') // Add forward slash with curly braces if params is used as optional {/:id}
   remove(@Param('id', ParseIntPipe) id: number) {
-    console.log({ id });
-
     return 'This action removes a user';
   }
 }
