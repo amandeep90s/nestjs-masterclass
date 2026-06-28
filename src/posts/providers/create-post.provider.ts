@@ -33,10 +33,9 @@ export class CreatePostProvider {
     const author: User = await this.usersService.findById(user.sub);
 
     // Find tags by their IDs if provided
-    const tags: Tag[] =
-      createPostDto.tags?.length
-        ? await this.tagsService.findMultipleByIds(createPostDto.tags)
-        : [];
+    const tags: Tag[] = createPostDto.tags?.length
+      ? await this.tagsService.findMultipleByIds(createPostDto.tags)
+      : [];
 
     // Create and save meta options if provided
     const post = this.postsRepository.create({
