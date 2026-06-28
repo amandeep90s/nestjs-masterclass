@@ -11,7 +11,7 @@ import { HashingProvider } from 'src/auth/providers/hashing.provider';
 import { UsersService } from 'src/users/providers/users.service';
 import jwtConfig from '../config/jwt.config';
 import { SignInDto } from '../dtos/signin.dto';
-import { IActiveUserData } from '../interfaces/active-user-data.interface';
+import { GenerateTokensProvider } from './generate-tokens.provider';
 
 @Injectable()
 export class SignInProvider {
@@ -37,6 +37,11 @@ export class SignInProvider {
      */
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
+
+    /**
+     * Injecting generateTokensProvider to generate access and refresh tokens
+     */
+    private readonly generateTokensProvider: GenerateTokensProvider,
   ) {}
 
   public async signIn(signInDto: SignInDto) {
@@ -67,18 +72,6 @@ export class SignInProvider {
       throw new UnauthorizedException('Invalid credentials provided');
     }
 
-    const activeUserData: IActiveUserData = {
-      sub: user.id,
-      email: user.email,
-    };
-
-    const accessToken = await this.jwtService.signAsync(activeUserData, {
-      audience: this.jwtConfiguration.tokenAudience,
-      issuer: this.jwtConfiguration.tokenIssuer,
-      secret: this.jwtConfiguration.secret,
-      expiresIn: this.jwtConfiguration.accessTokenTtl,
-    });
-
-    return { accessToken };
+    return await this.generateTokensProvider.generateTokens(user);
   }
 }
