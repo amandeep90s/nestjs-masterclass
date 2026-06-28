@@ -16,7 +16,7 @@ export class CreateTagDto {
   @MinLength(3, { message: 'Name must be at least 3 characters long' })
   @MaxLength(256, { message: 'Name must be at most 256 characters long' })
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'Slug for the tag', example: 'javascript' })
   @IsString()
@@ -26,7 +26,7 @@ export class CreateTagDto {
   @Matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
     message: 'A slug should be all small letters and hyphens only',
   })
-  slug: string;
+  slug!: string;
 
   @ApiPropertyOptional({
     description: 'Content/description of the tag',
