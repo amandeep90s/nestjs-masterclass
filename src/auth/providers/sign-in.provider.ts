@@ -5,11 +5,8 @@ import {
   RequestTimeoutException,
   UnauthorizedException,
 } from '@nestjs/common';
-import type { ConfigType } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
 import { HashingProvider } from 'src/auth/providers/hashing.provider';
 import { UsersService } from 'src/users/providers/users.service';
-import jwtConfig from '../config/jwt.config';
 import { SignInDto } from '../dtos/signin.dto';
 import { GenerateTokensProvider } from './generate-tokens.provider';
 
@@ -26,17 +23,6 @@ export class SignInProvider {
      * Injecting hashingProvider to validate password
      */
     private readonly hashingProvider: HashingProvider,
-
-    /**
-     * Injecting jwtService to generate JWT tokens
-     */
-    private readonly jwtService: JwtService,
-
-    /**
-     * Injecting jwtConfiguration
-     */
-    @Inject(jwtConfig.KEY)
-    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
 
     /**
      * Injecting generateTokensProvider to generate access and refresh tokens

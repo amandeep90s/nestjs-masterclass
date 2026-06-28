@@ -45,7 +45,11 @@ export class RefreshTokensProvider {
       // Verify the refresh token using jwtService
       const { sub } = await this.jwtService.verifyAsync<
         Pick<IActiveUserData, 'sub'>
-      >(refreshTokenDto.refreshToken, this.jwtConfiguration);
+      >(refreshTokenDto.refreshToken, {
+        secret: this.jwtConfiguration.secret,
+        audience: this.jwtConfiguration.tokenAudience,
+        issuer: this.jwtConfiguration.tokenIssuer,
+      });
 
       // Fetch the user associated with the refresh token from the database
       const user = await this.usersService.findById(sub);
@@ -54,9 +58,8 @@ export class RefreshTokensProvider {
       const tokens = await this.generateTokensProvider.generateTokens(user);
 
       return tokens;
-    } catch (error) {
-      // Handle error (e.g., invalid refresh token, user not found)
-      throw new UnauthorizedException(error);
+    } catch {
+      throw new UnauthorizedException('Invalid refresh token');
     }
   }
 }

@@ -24,7 +24,7 @@ export class GenerateTokensProvider {
     const token = await this.jwtService.signAsync(
       {
         sub: userId,
-        ...payload,
+        ...(payload ?? {}),
       },
       {
         audience: this.jwtConfiguration.tokenAudience,
