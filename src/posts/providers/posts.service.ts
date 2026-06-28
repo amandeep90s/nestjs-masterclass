@@ -5,6 +5,7 @@ import {
   RequestTimeoutException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
 import { IPaginated } from 'src/common/pagination/interfaces/paginated.interface';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
@@ -15,6 +16,7 @@ import { Repository } from 'typeorm';
 import { CreatePostDto, UpdatePostDto } from '../dtos';
 import { GetPostsDto } from '../dtos/get-posts.dto';
 import { Post } from '../post.entity';
+import { CreatePostProvider } from './create-post.provider';
 
 @Injectable()
 export class PostsService {
@@ -42,6 +44,10 @@ export class PostsService {
      * Injecting paginationProvider
      */
     private readonly paginationProvider: PaginationProvider,
+    /**
+     * Inject createPostProvider
+     */
+    private readonly createPostProvider: CreatePostProvider,
   ) {}
 
   public async findAll(postQuery: GetPostsDto): Promise<IPaginated<Post>> {
@@ -70,27 +76,11 @@ export class PostsService {
   /**
    * Create a new post
    * @param createPostDto - Data Transfer Object containing post details
+   * @param user - Active user data
    * @returns
    */
-  public async create(createPostDto: CreatePostDto) {
-    // Find author by ID
-    const author = await this.usersService.findById(createPostDto.authorId);
-    if (!author) {
-      throw new Error('Author not found');
-    }
-    // Find tags by their IDs if provided
-    let tags: Tag[] = [];
-    if (createPostDto.tags && createPostDto.tags.length > 0) {
-      tags = await this.tagsService.findMultipleByIds(createPostDto.tags);
-    }
-    // Create and save meta options if provided
-    const post = this.postsRepository.create({
-      ...createPostDto,
-      author,
-      tags,
-    });
-
-    return await this.postsRepository.save(post);
+  public async create(createPostDto: CreatePostDto, user: IActiveUserData) {
+    return await this.createPostProvider.create(createPostDto, user);
   }
 
   /**

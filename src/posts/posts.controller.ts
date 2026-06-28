@@ -10,6 +10,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ActiveUser } from 'src/auth/decorators/active-user.decorator';
+import type { IActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
 import { CreatePostDto, UpdatePostDto } from './dtos';
 import { GetPostsDto } from './dtos/get-posts.dto';
 import { PostsService } from './providers/posts.service';
@@ -37,8 +39,11 @@ export class PostsController {
       'You will get a 201 response if your post is created successfully',
   })
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
+  create(
+    @Body() createPostDto: CreatePostDto,
+    @ActiveUser() user: IActiveUserData,
+  ) {
+    return this.postsService.create(createPostDto, user);
   }
 
   @ApiOperation({ summary: 'Retrieves a blog post by ID' })

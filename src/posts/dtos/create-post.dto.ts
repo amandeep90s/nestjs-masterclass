@@ -24,7 +24,7 @@ export class CreatePostDto {
   @MinLength(4, { message: 'Title must be at least 4 characters long' })
   @MaxLength(512, { message: 'Title must be at most 512 characters long' })
   @IsNotEmpty({ message: 'Title is required' })
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'Slug for the post', example: 'my-first-post' })
   @IsString()
@@ -34,7 +34,7 @@ export class CreatePostDto {
   @Matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
     message: 'A slug should be all small letters and hyphens only',
   })
-  slug: string;
+  slug!: string;
 
   @ApiProperty({
     description: 'Possible types of the post: post, page, story, series',
@@ -43,7 +43,7 @@ export class CreatePostDto {
   })
   @IsEnum(EPostType, { message: 'Invalid post type' })
   @IsNotEmpty({ message: 'Post type is required' })
-  postType: EPostType;
+  postType!: EPostType;
 
   @ApiPropertyOptional({
     description: 'Content of the post',
@@ -61,7 +61,7 @@ export class CreatePostDto {
   })
   @IsEnum(EPostStatus, { message: 'Invalid post status' })
   @IsNotEmpty({ message: 'Post status is required' })
-  status: EPostStatus;
+  status!: EPostStatus;
 
   @ApiPropertyOptional({
     description:
@@ -109,14 +109,4 @@ export class CreatePostDto {
   @ValidateNested({ each: true })
   @Type(() => CreatePostMetaOptionsDto)
   metaOptions?: CreatePostMetaOptionsDto;
-
-  @ApiProperty({
-    type: 'integer',
-    required: true,
-    description: 'ID of the author creating the post',
-    example: 1,
-  })
-  @IsNotEmpty()
-  @IsInt()
-  authorId: number;
 }

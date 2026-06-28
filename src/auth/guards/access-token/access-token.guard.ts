@@ -10,15 +10,8 @@ import { JwtService } from '@nestjs/jwt';
 import type { Request } from 'express';
 import jwtConfig from 'src/auth/config/jwt.config';
 import { REQUEST_USER_KEY } from 'src/auth/constants/auth.constants';
-
-interface JwtPayload {
-  sub: number;
-  email: string;
-  iat: number;
-  exp: number;
-  aud: string;
-  iss: string;
-}
+import { IJwtPayload } from 'src/auth/interfaces/jwt-payload.interface';
+import { TRequestWithUser } from 'src/auth/types/request-with-user.type';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
@@ -37,7 +30,7 @@ export class AccessTokenGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     // Extract the request object from the execution context
-    const request: Request = context.switchToHttp().getRequest();
+    const request: TRequestWithUser = context.switchToHttp().getRequest();
 
     // Extract the authorization header from the request
     const token = this.extractTokenFromHeader(request);
@@ -50,7 +43,7 @@ export class AccessTokenGuard implements CanActivate {
     }
 
     try {
-      const payload: JwtPayload = await this.jwtService.verifyAsync(
+      const payload: IJwtPayload = await this.jwtService.verifyAsync(
         token,
         this.jwtConfiguration,
       );
