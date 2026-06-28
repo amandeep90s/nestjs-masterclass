@@ -15,5 +15,5 @@ export class CreateManyUsersDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreateUserDto)
-  users: CreateUserDto[];
+  users!: CreateUserDto[];
 }

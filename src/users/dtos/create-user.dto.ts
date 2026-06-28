@@ -13,7 +13,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @MinLength(3, { message: 'First name must be at least 3 characters long' })
   @MaxLength(100, { message: 'First name must be at most 100 characters long' })
-  firstName: string;
+  firstName!: string;
 
   @IsString()
   @IsOptional()
@@ -24,7 +24,7 @@ export class CreateUserDto {
   @IsEmail()
   @IsNotEmpty()
   @MaxLength(100, { message: 'Email must be at most 100 characters long' })
-  email: string;
+  email!: string;
 
   @IsString()
   @IsNotEmpty()
@@ -37,5 +37,5 @@ export class CreateUserDto {
         'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
     },
   )
-  password: string;
+  password!: string;
 }
