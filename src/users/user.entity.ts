@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Post } from 'src/posts/post.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -33,6 +34,7 @@ export class User {
     length: 100,
     nullable: false,
   })
+  @Exclude()
   password: string;
 
   @Column({
@@ -40,6 +42,7 @@ export class User {
     nullable: true,
     unique: true,
   })
+  @Exclude()
   googleId?: string;
 
   @OneToMany(() => Post, (post) => post.author)
