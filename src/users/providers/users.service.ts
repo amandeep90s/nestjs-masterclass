@@ -19,6 +19,9 @@ import { User } from '../user.entity';
 import { CreateUserProvider } from './create-user.provider';
 import { FindOneUserByEmailProvider } from './find-one-user-by-email.provider';
 import { UsersCreateManyProvider } from './users-create-many.provider';
+import { FindOneByGoogleIdProvider } from './find-one-by-google-id.provider';
+import { CreateGoogleUserProvider } from './create-google-user.provider';
+import { GoogleUser } from '../interfaces/google-user.interface';
 
 /**
  * Class to connect to Users table and perform business operations
@@ -65,6 +68,16 @@ export class UsersService {
      * Injecting findOneUserByEmailProvider
      */
     private readonly findOneUserByEmailProvider: FindOneUserByEmailProvider,
+
+    /**
+     * Injecting findOneByGoogleIdProvider
+     */
+    private readonly findOneByGoogleIdProvider: FindOneByGoogleIdProvider,
+
+    /**
+     * Injecting CreateGoogleUserProvider
+     */
+    private readonly createGoogleUserProvider: CreateGoogleUserProvider,
   ) {}
   /**
    * Fetch all users with pagination
@@ -138,5 +151,13 @@ export class UsersService {
 
   public async findOneByEmail(email: string): Promise<User | null> {
     return await this.findOneUserByEmailProvider.findOneByEmail(email);
+  }
+
+  public async findOneByGoogleId(googleId: string): Promise<User | null> {
+    return await this.findOneByGoogleIdProvider.findOneByGoogleId(googleId);
+  }
+
+  public async createGoogleUser(googleUser: GoogleUser): Promise<User> {
+    return await this.createGoogleUserProvider.createGoogleUser(googleUser);
   }
 }
