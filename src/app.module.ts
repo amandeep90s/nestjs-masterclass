@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
+import mailConfig from './config/mail.config';
 
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
@@ -21,6 +22,7 @@ import { TagsModule } from './tags/tags.module';
 import { UsersModule } from './users/users.module';
 import { DataResponseInterceptor } from './common/interceptors/data-response/data-response.interceptor';
 import { UploadsModule } from './uploads/uploads.module';
+import { MailModule } from './mail/mail.module';
 
 const ENV = process.env.NODE_ENV;
 
@@ -30,7 +32,7 @@ const ENV = process.env.NODE_ENV;
       isGlobal: true,
       // envFilePath: ['.env.development'], // for testing purpose
       envFilePath: !ENV ? '.env' : `.env.${ENV}`,
-      load: [appConfig, databaseConfig],
+      load: [appConfig, databaseConfig, mailConfig],
       validationSchema: environmentValidation,
     }),
     ConfigModule.forFeature(jwtConfig),
@@ -57,6 +59,7 @@ const ENV = process.env.NODE_ENV;
     MetaOptionsModule,
     PaginationModule,
     UploadsModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [
