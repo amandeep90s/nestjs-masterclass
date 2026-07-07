@@ -39,10 +39,10 @@ async function bootstrap() {
 
   config.update({
     credentials: {
-      accessKeyId: serviceConfig.get('appConfig.aws.accessKeyId'),
-      secretAccessKey: serviceConfig.get('appConfig.aws.secretAccessKey'),
+      accessKeyId: serviceConfig.get('app.aws.accessKeyId'),
+      secretAccessKey: serviceConfig.get('app.aws.secretAccessKey'),
     },
-    region: serviceConfig.get('appConfig.aws.region'),
+    region: serviceConfig.get('app.aws.region'),
   });
 
   // Enable CORS
