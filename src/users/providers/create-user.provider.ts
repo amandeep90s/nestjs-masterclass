@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HashingProvider } from 'src/auth/providers/hashing.provider';
+import { MailService } from 'src/mail/providers/mail.service';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dtos';
 import { User } from '../user.entity';
@@ -24,6 +25,10 @@ export class CreateUserProvider {
      */
     @Inject(forwardRef(() => HashingProvider))
     private readonly hashingProvider: HashingProvider,
+    /**
+     * Injecting Mail service
+     */
+    private readonly mailService: MailService,
   ) {}
   /**
    * Create a new user
@@ -59,7 +64,9 @@ export class CreateUserProvider {
       password: await this.hashingProvider.hashPassword(createUserDto.password),
     });
     try {
-      return await this.usersRepository.save(newUserObj);
+      const savedUser = await this.usersRepository.save(newUserObj);
+      await this.mailService.sendWelcomeEmail(savedUser);
+      return savedUser;
     } catch {
       throw new RequestTimeoutException(
         'Unable to process request at this time please try again later',
