@@ -10,21 +10,21 @@ import { EFileType } from './enums/file-types.enum';
 @Entity()
 export class Upload {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({
     type: 'varchar',
     length: 1024,
     nullable: false,
   })
-  name: string;
+  name!: string;
 
   @Column({
     type: 'varchar',
     length: 1024,
     nullable: false,
   })
-  path: string;
+  path!: string;
 
   @Column({
     type: 'enum',
@@ -32,25 +32,25 @@ export class Upload {
     default: EFileType.IMAGE,
     nullable: false,
   })
-  type: string;
+  type!: EFileType;
 
   @Column({
     type: 'varchar',
     length: 128,
     nullable: false,
   })
-  mimetype: string;
+  mimetype!: string;
 
   @Column({
     type: 'varchar',
     length: 128,
     nullable: false,
   })
-  size: number;
+  size!: number;
 
   @CreateDateColumn()
-  createdDate: Date;
+  createdDate!: Date;
 
   @UpdateDateColumn()
-  updatedDate: Date;
+  updatedDate!: Date;
 }
