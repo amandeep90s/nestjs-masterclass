@@ -1,5 +1,6 @@
 allowBuilds:
   '@compodoc/compodoc': true
   '@scarf/scarf': true
+  aws-sdk: true
   bcrypt: true
   unrs-resolver: true
