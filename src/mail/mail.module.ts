@@ -28,7 +28,7 @@ import { MailService } from './providers/mail.service';
         },
         template: {
           dir: join(__dirname, 'templates'),
-          adapter: new HandlebarsAdapter(),
+          adapter: new HandlebarsAdapter(undefined, { inlineCssEnabled: true }),
           options: {
             strict: true,
           },
