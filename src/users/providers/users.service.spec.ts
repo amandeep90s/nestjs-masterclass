@@ -5,6 +5,9 @@ import { FindOneByGoogleIdProvider } from './find-one-by-google-id.provider';
 import { FindOneUserByEmailProvider } from './find-one-user-by-email.provider';
 import { CreateUserProvider } from './create-user.provider';
 import { UsersCreateManyProvider } from './users-create-many.provider';
+import { DataSource } from 'typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { User } from '../user.entity';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -13,6 +16,14 @@ describe('UsersService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
+        {
+          provide: DataSource,
+          useValue: {},
+        },
+        {
+          provide: getRepositoryToken(User),
+          useValue: {},
+        },
         {
           provide: CreateGoogleUserProvider,
           useValue: {},
@@ -40,7 +51,7 @@ describe('UsersService', () => {
   });
 
   describe('root', () => {
-    it('module should be defined"', () => {
+    it('should be defined"', () => {
       expect(service).toBeDefined();
     });
   });
