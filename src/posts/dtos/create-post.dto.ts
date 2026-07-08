@@ -54,8 +54,7 @@ export class CreatePostDto {
   content?: string;
 
   @ApiProperty({
-    description:
-      'Possible statuses of the post: draft, published, review, scheduled',
+    description: 'Possible statuses of the post: draft, published, review, scheduled',
     enum: EPostStatus,
     example: EPostStatus.DRAFT,
   })
@@ -64,10 +63,8 @@ export class CreatePostDto {
   status!: EPostStatus;
 
   @ApiPropertyOptional({
-    description:
-      'Serialize your JSON object else a validation error will be thrown',
-    example:
-      '{"@context":"https://schema.org","@type":"BlogPosting","headline":"My First Post"}',
+    description: 'Serialize your JSON object else a validation error will be thrown',
+    example: '{"@context":"https://schema.org","@type":"BlogPosting","headline":"My First Post"}',
   })
   @IsOptional()
   @IsJSON()

@@ -1,9 +1,4 @@
-import {
-  forwardRef,
-  Inject,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { forwardRef, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/providers/users.service';
@@ -43,13 +38,14 @@ export class RefreshTokensProvider {
   ): Promise<{ accessToken: string; refreshToken: string }> {
     try {
       // Verify the refresh token using jwtService
-      const { sub } = await this.jwtService.verifyAsync<
-        Pick<IActiveUserData, 'sub'>
-      >(refreshTokenDto.refreshToken, {
-        secret: this.jwtConfiguration.secret,
-        audience: this.jwtConfiguration.tokenAudience,
-        issuer: this.jwtConfiguration.tokenIssuer,
-      });
+      const { sub } = await this.jwtService.verifyAsync<Pick<IActiveUserData, 'sub'>>(
+        refreshTokenDto.refreshToken,
+        {
+          secret: this.jwtConfiguration.secret,
+          audience: this.jwtConfiguration.tokenAudience,
+          issuer: this.jwtConfiguration.tokenIssuer,
+        },
+      );
 
       // Fetch the user associated with the refresh token from the database
       const user = await this.usersService.findById(sub);

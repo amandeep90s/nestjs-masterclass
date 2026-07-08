@@ -37,10 +37,8 @@ export class CreateTagDto {
   description?: string;
 
   @ApiPropertyOptional({
-    description:
-      'Serialize your JSON object else a validation error will be thrown',
-    example:
-      '{"@context":"https://schema.org","@type":"BlogPosting","headline":"My First Post"}',
+    description: 'Serialize your JSON object else a validation error will be thrown',
+    example: '{"@context":"https://schema.org","@type":"BlogPosting","headline":"My First Post"}',
   })
   @IsOptional()
   @IsJSON()

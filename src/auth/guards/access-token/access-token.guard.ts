@@ -37,16 +37,11 @@ export class AccessTokenGuard implements CanActivate {
 
     // Validate the presence and format of the authorization header
     if (!token) {
-      throw new UnauthorizedException(
-        'Authorization token is missing or malformed',
-      );
+      throw new UnauthorizedException('Authorization token is missing or malformed');
     }
 
     try {
-      const payload: IJwtPayload = await this.jwtService.verifyAsync(
-        token,
-        this.jwtConfiguration,
-      );
+      const payload: IJwtPayload = await this.jwtService.verifyAsync(token, this.jwtConfiguration);
 
       request[REQUEST_USER_KEY] = payload;
     } catch {

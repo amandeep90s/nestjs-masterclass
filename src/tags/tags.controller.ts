@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Param,
-  ParseIntPipe,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { CreateTagDto } from './dtos';
 import { TagsService } from './providers/tags.service';
@@ -17,8 +10,7 @@ export class TagsController {
   @ApiOperation({ summary: 'Creates a new tag' })
   @ApiResponse({
     status: 201,
-    description:
-      'You will get a 201 response if your tag is created successfully',
+    description: 'You will get a 201 response if your tag is created successfully',
   })
   @Post()
   public create(@Body() createTagDto: CreateTagDto) {
@@ -28,8 +20,7 @@ export class TagsController {
   @ApiOperation({ summary: 'Deletes an existing tag' })
   @ApiResponse({
     status: 200,
-    description:
-      'You will get a 200 response if your tag is deleted successfully',
+    description: 'You will get a 200 response if your tag is deleted successfully',
   })
   @ApiParam({
     name: 'id',

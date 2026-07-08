@@ -108,9 +108,7 @@ export class PostsService {
     }
 
     if (tags.length !== updatePostDto.tags?.length) {
-      throw new BadRequestException(
-        'Please check your tag Ids and ensure they are correct',
-      );
+      throw new BadRequestException('Please check your tag Ids and ensure they are correct');
     }
 
     // Find the existing post
@@ -137,11 +135,8 @@ export class PostsService {
     post.status = updatePostDto.status ?? post.status;
     post.postType = updatePostDto.postType ?? post.postType;
     post.slug = updatePostDto.slug ?? post.slug;
-    post.featuredImageUrl =
-      updatePostDto.featuredImageUrl ?? post.featuredImageUrl;
-    post.publishOn = updatePostDto.publishOn
-      ? new Date(updatePostDto.publishOn)
-      : post.publishOn;
+    post.featuredImageUrl = updatePostDto.featuredImageUrl ?? post.featuredImageUrl;
+    post.publishOn = updatePostDto.publishOn ? new Date(updatePostDto.publishOn) : post.publishOn;
     post.tags = tags.length > 0 ? tags : post.tags;
 
     try {

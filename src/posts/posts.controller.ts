@@ -24,8 +24,7 @@ export class PostsController {
   @ApiOperation({ summary: 'Retrieves all blog posts' })
   @ApiResponse({
     status: 200,
-    description:
-      'You will get a 200 response if your posts are retrieved successfully',
+    description: 'You will get a 200 response if your posts are retrieved successfully',
   })
   @Get()
   findAll(@Query() postQuery: GetPostsDto) {
@@ -35,22 +34,17 @@ export class PostsController {
   @ApiOperation({ summary: 'Creates a new blog post' })
   @ApiResponse({
     status: 201,
-    description:
-      'You will get a 201 response if your post is created successfully',
+    description: 'You will get a 201 response if your post is created successfully',
   })
   @Post()
-  create(
-    @Body() createPostDto: CreatePostDto,
-    @ActiveUser() user: IActiveUserData,
-  ) {
+  create(@Body() createPostDto: CreatePostDto, @ActiveUser() user: IActiveUserData) {
     return this.postsService.create(createPostDto, user);
   }
 
   @ApiOperation({ summary: 'Retrieves a blog post by ID' })
   @ApiResponse({
     status: 200,
-    description:
-      'You will get a 200 response if your post is retrieved successfully',
+    description: 'You will get a 200 response if your post is retrieved successfully',
   })
   @ApiParam({
     name: 'id',
@@ -66,8 +60,7 @@ export class PostsController {
   @ApiOperation({ summary: 'Updates an existing blog post' })
   @ApiResponse({
     status: 200,
-    description:
-      'You will get a 200 response if your post is updated successfully',
+    description: 'You will get a 200 response if your post is updated successfully',
   })
   @ApiParam({
     name: 'id',
@@ -76,18 +69,14 @@ export class PostsController {
     example: 1,
   })
   @Put('/:id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updatePostDto: UpdatePostDto,
-  ) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updatePostDto: UpdatePostDto) {
     return this.postsService.update(id, updatePostDto);
   }
 
   @ApiOperation({ summary: 'Deletes an existing blog post' })
   @ApiResponse({
     status: 200,
-    description:
-      'You will get a 200 response if your post is deleted successfully',
+    description: 'You will get a 200 response if your post is deleted successfully',
   })
   @ApiParam({
     name: 'id',
@@ -103,8 +92,7 @@ export class PostsController {
   @ApiOperation({ summary: 'Deletes an existing blog post' })
   @ApiResponse({
     status: 200,
-    description:
-      'You will get a 200 response if your post is deleted successfully',
+    description: 'You will get a 200 response if your post is deleted successfully',
   })
   @ApiParam({
     name: 'id',

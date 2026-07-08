@@ -60,10 +60,7 @@ export class UsersService {
    * @param limit
    * @returns
    */
-  public findAll(
-    page: number,
-    limit: number,
-  ): Array<{ firstName: string; email: string }> {
+  public findAll(page: number, limit: number): Array<{ firstName: string; email: string }> {
     console.log({ page, limit });
 
     throw new HttpException(

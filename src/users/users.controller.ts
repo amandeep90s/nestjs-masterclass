@@ -34,8 +34,7 @@ export class UsersController {
   })
   @ApiResponse({
     status: 200,
-    description:
-      'Users have been successfully retrieved based on the pagination parameters.',
+    description: 'Users have been successfully retrieved based on the pagination parameters.',
   })
   @ApiQuery({
     name: 'page',

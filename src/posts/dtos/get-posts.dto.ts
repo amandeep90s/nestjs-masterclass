@@ -18,7 +18,4 @@ class GetPostsBaseDto {
   authorId?: string;
 }
 
-export class GetPostsDto extends IntersectionType(
-  GetPostsBaseDto,
-  PaginationQueryDto,
-) {}
+export class GetPostsDto extends IntersectionType(GetPostsBaseDto, PaginationQueryDto) {}

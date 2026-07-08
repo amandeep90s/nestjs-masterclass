@@ -16,6 +16,7 @@
     "rootDir": "./src",
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
+    "types": ["jest"],
     "paths": {
       "src/*": ["./src/*"]
     }

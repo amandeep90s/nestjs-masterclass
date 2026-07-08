@@ -44,10 +44,7 @@ export class SignInProvider {
     let isEqual: boolean = false;
 
     try {
-      isEqual = await this.hashingProvider.comparePassword(
-        signInDto.password,
-        user.password,
-      );
+      isEqual = await this.hashingProvider.comparePassword(signInDto.password, user.password);
     } catch (error) {
       throw new RequestTimeoutException(error, {
         description: 'Could not validate password at this time',
