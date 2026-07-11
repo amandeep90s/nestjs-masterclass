@@ -1,10 +1,15 @@
 import { INestApplication } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import request from 'supertest';
 import { App } from 'supertest/types';
+import { DataSource } from 'typeorm';
 import { bootstrapNestApp } from '../helpers/bootstrap-nest-app';
-import { dropDatabase } from '../helpers/drop-database';
-import { missingEmail, missingFirstName, missingPassword } from './users.post.e2e-spec.sample-data';
+import { truncateDatabase } from '../helpers/truncate-database';
+import {
+  completeUser,
+  missingEmail,
+  missingFirstName,
+  missingPassword,
+} from './users.post.e2e-spec.sample-data';
 
 jest.mock('@nestjs-modules/mailer/adapters/handlebars.adapter', () => ({
   HandlebarsAdapter: jest.fn().mockImplementation(() => ({ compile: jest.fn() })),
@@ -12,18 +17,21 @@ jest.mock('@nestjs-modules/mailer/adapters/handlebars.adapter', () => ({
 
 describe('[Users] @Post Endpoints', () => {
   let app: INestApplication<App>;
-  let config: ConfigService;
   let httpServer: App;
+  let dataSource: DataSource;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     app = await bootstrapNestApp();
-    config = app.get<ConfigService>(ConfigService);
     httpServer = app.getHttpServer();
+    dataSource = app.get(DataSource);
   });
 
-  afterEach(async () => {
-    await dropDatabase(config);
+  afterAll(async () => {
     await app.close();
+  });
+
+  beforeEach(async () => {
+    await truncateDatabase(dataSource);
   });
 
   it('/users - Endpoint is public', async () => {
@@ -42,9 +50,17 @@ describe('[Users] @Post Endpoints', () => {
     return request(httpServer).post('/users').send(missingPassword).expect(400);
   });
 
-  it.todo('/users - valid request successfully creates a user');
+  it('/users - valid request successfully creates a user', async () => {
+    return request(httpServer).post('/users').send(completeUser).expect(201);
+  });
 
-  it.todo('/users - password is not returned in the response');
+  it('/users - password is not returned in the response', async () => {
+    const response = await request(httpServer).post('/users').send(completeUser).expect(201);
+    expect(response.body.password).toBeUndefined();
+  });
 
-  it.todo('/users - googleId is not returned in the response');
+  it('/users - googleId is not returned in the response', async () => {
+    const response = await request(httpServer).post('/users').send(completeUser).expect(201);
+    expect(response.body.googleId).toBeUndefined();
+  });
 });
