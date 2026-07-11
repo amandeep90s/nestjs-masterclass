@@ -1,9 +1,12 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { afterEach, beforeEach, describe, it } from 'node:test';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
+
+jest.mock('@nestjs-modules/mailer/adapters/handlebars.adapter', () => ({
+  HandlebarsAdapter: jest.fn().mockImplementation(() => ({ compile: jest.fn() })),
+}));
 
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;

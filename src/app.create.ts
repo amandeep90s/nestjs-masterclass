@@ -1,8 +1,5 @@
-import { INestApplication } from '@nestjs/common';
-import { ValidationPipe } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { config } from 'aws-sdk';
-import { ConfigService } from '@nestjs/config';
 
 export function appCreate(app: INestApplication): void {
   // Add validation pipe globally
@@ -30,17 +27,6 @@ export function appCreate(app: INestApplication): void {
   // Instantiate swagger document
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api/docs', app, document);
-
-  // Setup AWS S3 Bucket Configuration
-  const serviceConfig = app.get(ConfigService);
-
-  config.update({
-    credentials: {
-      accessKeyId: serviceConfig.get('app.aws.accessKeyId'),
-      secretAccessKey: serviceConfig.get('app.aws.secretAccessKey'),
-    },
-    region: serviceConfig.get('app.aws.region'),
-  });
 
   // Enable CORS
   app.enableCors();

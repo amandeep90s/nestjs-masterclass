@@ -22,6 +22,7 @@
       "reflect-metadata",
       "express",
       "@types/express",
+      "multer",
       "supertest",
       "@types/supertest"
     ],
