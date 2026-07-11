@@ -13,14 +13,22 @@
     "target": "ES2023",
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./src",
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "types": ["jest"],
+    "types": [
+      "jest",
+      "@types/jest",
+      "node",
+      "reflect-metadata",
+      "express",
+      "@types/express",
+      "supertest",
+      "@types/supertest"
+    ],
     "paths": {
       "src/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "test/**/*"],
   "exclude": ["node_modules", "dist"]
 }
