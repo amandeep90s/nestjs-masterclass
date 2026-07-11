@@ -1,5 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import request from 'supertest';
 import { App } from 'supertest/types';
 import { bootstrapNestApp } from '../helpers/bootstrap-nest-app';
 import { dropDatabase } from '../helpers/drop-database';
@@ -11,10 +12,12 @@ jest.mock('@nestjs-modules/mailer/adapters/handlebars.adapter', () => ({
 describe('[Users] @Post Endpoints', () => {
   let app: INestApplication<App>;
   let config: ConfigService;
+  let httpServer: App;
 
   beforeEach(async () => {
     app = await bootstrapNestApp();
     config = app.get<ConfigService>(ConfigService);
+    httpServer = app.getHttpServer();
   });
 
   afterEach(async () => {
@@ -22,7 +25,9 @@ describe('[Users] @Post Endpoints', () => {
     await app.close();
   });
 
-  it.todo('/users - Endpoint is public');
+  it('/users - Endpoint is public', async () => {
+    return request(httpServer).post('/users').send({}).expect(400);
+  });
 
   it.todo('/users - firstName is required');
 

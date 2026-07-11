@@ -17,8 +17,8 @@ export class UploadToAwsProvider {
     this.s3Client = new S3Client({
       region: this.configService.get<string>('app.aws.region'),
       credentials: {
-        accessKeyId: this.configService.getOrThrow<string>('app.aws.accessKeyId'),
-        secretAccessKey: this.configService.getOrThrow<string>('app.aws.secretAccessKey'),
+        accessKeyId: this.configService.get<string>('app.aws.accessKeyId'),
+        secretAccessKey: this.configService.get<string>('app.aws.secretAccessKey'),
       },
     });
   }
