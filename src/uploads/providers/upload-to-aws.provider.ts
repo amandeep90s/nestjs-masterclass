@@ -2,7 +2,6 @@ import { Injectable, RequestTimeoutException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { S3 } from 'aws-sdk';
 import * as path from 'path';
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UploadToAwsProvider {
@@ -46,6 +45,6 @@ export class UploadToAwsProvider {
     // Generate timestamp and UUID
     const timestamp = new Date().getTime().toString().trim();
 
-    return `${filename}-${timestamp}-${uuidv4()}${extension}`;
+    return `${filename}-${timestamp}${extension}`;
   }
 }
