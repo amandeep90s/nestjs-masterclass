@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  RequestTimeoutException,
-} from '@nestjs/common';
+import { ConflictException, Injectable, RequestTimeoutException } from '@nestjs/common';
 import { error } from 'console';
 import { DataSource } from 'typeorm';
 import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
@@ -54,12 +50,9 @@ export class UsersCreateManyProvider {
       // If error rollback transaction
       await queryRunner.rollbackTransaction();
 
-      throw new ConflictException(
-        'Could not complete the transaction, please try again',
-        {
-          description: String(error),
-        },
-      );
+      throw new ConflictException('Could not complete the transaction, please try again', {
+        description: String(error),
+      });
     } finally {
       // Finally release query runner
       await queryRunner.release();

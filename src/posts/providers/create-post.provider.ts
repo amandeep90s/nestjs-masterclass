@@ -49,8 +49,7 @@ export class CreatePostProvider {
     } catch (error) {
       throw new ConflictException('Could not create post', {
         cause: error,
-        description:
-          'Ensure that the slug is unique and all required fields are provided.',
+        description: 'Ensure that the slug is unique and all required fields are provided.',
       });
     }
   }

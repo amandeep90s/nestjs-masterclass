@@ -23,10 +23,7 @@ export class BcryptProvider implements HashingProvider {
    * @param encrypted The hashed password
    * @returns {Promise<boolean>} True if the password matches, false otherwise
    */
-  async comparePassword(
-    data: string | Buffer,
-    encrypted: string,
-  ): Promise<boolean> {
+  async comparePassword(data: string | Buffer, encrypted: string): Promise<boolean> {
     return bcrypt.compare(data, encrypted);
   }
 }

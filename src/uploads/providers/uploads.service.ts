@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -31,12 +27,7 @@ export class UploadsService {
 
   public async uploadFile(file: Express.Multer.File): Promise<IUploadFile> {
     // Throw an error for unsupported MIME types
-    const validMimeTypes = [
-      'image/jpeg',
-      'image/jpg',
-      'image/png',
-      'image/gif',
-    ];
+    const validMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
     if (!validMimeTypes.includes(file.mimetype)) {
       throw new BadRequestException(`Unsupported MIME type: ${file.mimetype}`);
     }

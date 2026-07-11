@@ -1,9 +1,4 @@
-import {
-  ConflictException,
-  forwardRef,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
+import { ConflictException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -30,9 +25,7 @@ export class CreateGoogleUserProvider {
     try {
       const user = this.usersRepository.create({
         ...googleUser,
-        password: await this.hashingProvider.hashPassword(
-          globalThis.crypto.randomUUID(),
-        ),
+        password: await this.hashingProvider.hashPassword(globalThis.crypto.randomUUID()),
       });
 
       return await this.usersRepository.save(user);

@@ -1,18 +1,12 @@
 import {
-  forwardRef,
   HttpException,
   HttpStatus,
-  Inject,
   Injectable,
   NotFoundException,
   RequestTimeoutException,
 } from '@nestjs/common';
-import type { ConfigType } from '@nestjs/config';
-import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthService } from 'src/auth/providers/auth.service';
 import { Repository } from 'typeorm';
-import profileConfig from '../config/profile.config';
 import { CreateUserDto } from '../dtos';
 import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
 import { User } from '../user.entity';
@@ -28,31 +22,12 @@ import { GoogleUser } from '../interfaces/google-user.interface';
  */
 @Injectable()
 export class UsersService {
-  /**
-   * Constructor
-   * @param authService
-   */
   constructor(
-    /**
-     * Injecting AuthService to verify authentication
-     */
-    @Inject(forwardRef(() => AuthService))
-    private readonly authService: AuthService,
     /**
      * Injecting Users repository
      */
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    /**
-     * Injecting config service to access application variables
-     */
-    private readonly configService: ConfigService,
-
-    /**
-     * Injecting profile configuration
-     */
-    @Inject(profileConfig.KEY)
-    private readonly profileConfiguration: ConfigType<typeof profileConfig>,
 
     /**
      * Inject UsersCreateManyProvider
@@ -85,10 +60,7 @@ export class UsersService {
    * @param limit
    * @returns
    */
-  public findAll(
-    page: number,
-    limit: number,
-  ): Array<{ firstName: string; email: string }> {
+  public findAll(page: number, limit: number): Array<{ firstName: string; email: string }> {
     console.log({ page, limit });
 
     throw new HttpException(

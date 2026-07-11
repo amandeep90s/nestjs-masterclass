@@ -61,12 +61,7 @@ export class GoogleAuthenticationService implements OnModuleInit {
         throw new UnauthorizedException('Invalid Google token payload');
       }
 
-      const {
-        sub: googleId,
-        email,
-        given_name: firstName,
-        family_name: lastName,
-      } = payload;
+      const { sub: googleId, email, given_name: firstName, family_name: lastName } = payload;
 
       // Find the user in the database by using googleId
       const user = await this.usersService.findOneByGoogleId(googleId);

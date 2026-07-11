@@ -27,9 +27,7 @@ export class PaginationProvider {
   ): Promise<IPaginated<T>> {
     const results = await repository.find({
       take: paginationQuery.limit,
-      skip: paginationQuery.page
-        ? (paginationQuery.page - 1) * paginationQuery.limit
-        : 0,
+      skip: paginationQuery.page ? (paginationQuery.page - 1) * paginationQuery.limit : 0,
     });
 
     /**
@@ -44,13 +42,8 @@ export class PaginationProvider {
     const totalItems = await repository.count();
     const totalPages = Math.ceil(totalItems / paginationQuery.limit);
     const nextPage =
-      paginationQuery.page === totalPages
-        ? paginationQuery.page
-        : paginationQuery.page + 1;
-    const prevPage =
-      paginationQuery.page === 1
-        ? paginationQuery.page
-        : paginationQuery.page - 1;
+      paginationQuery.page === totalPages ? paginationQuery.page : paginationQuery.page + 1;
+    const prevPage = paginationQuery.page === 1 ? paginationQuery.page : paginationQuery.page - 1;
 
     const finalResponse: IPaginated<T> = {
       data: results,
