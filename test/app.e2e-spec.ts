@@ -4,6 +4,10 @@ import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 
+jest.mock('@nestjs-modules/mailer/adapters/handlebars.adapter', () => ({
+  HandlebarsAdapter: jest.fn().mockImplementation(() => ({ compile: jest.fn() })),
+}));
+
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
 
@@ -16,7 +20,14 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
+  afterEach(async () => {
+    await app.close();
+  });
+
   it('/ (GET)', () => {
-    return request(app.getHttpServer()).get('/').expect(200).expect('Hello World!');
+    return request(app.getHttpServer())
+      .get('/')
+      .expect(200)
+      .expect({ data: 'Hello World!', apiVersion: 'v1' });
   });
 });

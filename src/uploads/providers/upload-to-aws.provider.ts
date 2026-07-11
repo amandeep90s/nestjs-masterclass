@@ -1,33 +1,43 @@
+/// <reference types="multer" />
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Injectable, RequestTimeoutException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { S3 } from 'aws-sdk';
 import * as path from 'path';
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UploadToAwsProvider {
+  private readonly s3Client: S3Client;
+
   constructor(
     /**
      * Inject - configService
      */
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+    this.s3Client = new S3Client({
+      region: this.configService.get<string>('app.aws.region'),
+      credentials: {
+        accessKeyId: this.configService.get<string>('app.aws.accessKeyId'),
+        secretAccessKey: this.configService.get<string>('app.aws.secretAccessKey'),
+      },
+    });
+  }
 
   public async fileUpload(file: Express.Multer.File): Promise<string> {
-    const s3 = new S3();
+    const fileName = this.generateFileName(file);
 
     try {
-      const uploadResult = await s3
-        .upload({
+      await this.s3Client.send(
+        new PutObjectCommand({
           Bucket: this.configService.get<string>('app.aws.publicBucketName'),
-          Key: this.generateFileName(file),
+          Key: fileName,
           Body: file.buffer,
           ContentType: file.mimetype,
           ACL: 'public-read',
-        })
-        .promise();
+        }),
+      );
 
-      return uploadResult.Key;
+      return fileName;
     } catch (error: unknown) {
       throw new RequestTimeoutException(error);
     }
@@ -46,6 +56,6 @@ export class UploadToAwsProvider {
     // Generate timestamp and UUID
     const timestamp = new Date().getTime().toString().trim();
 
-    return `${filename}-${timestamp}-${uuidv4()}${extension}`;
+    return `${filename}-${timestamp}${extension}`;
   }
 }
